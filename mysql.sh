@@ -20,7 +20,7 @@ CHECK_ROOT(){
     fi
 }
 
-VALIDATE(){
+VALIDATE() {
     if [ $1 -ne 0 ]
     then
         echo -e "$2 is...$R FAILED $N"  | tee -a $LOG_FILE
@@ -33,6 +33,7 @@ VALIDATE(){
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 CHECK_ROOT
+
 
 dnf install mysql-server -y &>>$LOG_FILE
 if [ $? -ne 0 ]
@@ -66,8 +67,8 @@ else
 fi
 
 mysql -h mysql.manudevops.shop -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
-if [ $? -ne 0 ]
 
+if [ $? -ne 0 ]
 then
     echo "MySQL root password is not setup, setting now" &>>$LOG_FILE
     mysql_secure_installation --set-root-pass ExpenseApp@1
