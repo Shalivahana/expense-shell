@@ -34,7 +34,7 @@ echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 CHECK_ROOT
 
-
+dnf install mysql-server -y &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
     echo "MySQL server is not yet installed, installing now" &>>$LOG_FILE
@@ -44,7 +44,7 @@ else
     echo -e "MySQL server is already installed...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
 
-
+systemctl enable mysqld &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
     echo "MySQL is not yet enabled, enabling now" &>>$LOG_FILE
@@ -53,7 +53,7 @@ then
 else
     echo -e "MySQL is already enbaled...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
-
+systemctl start mysqld &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
     echo "MySQL is not yet started, starting  now" &>>$LOG_FILE
