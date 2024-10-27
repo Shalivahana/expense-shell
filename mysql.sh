@@ -35,33 +35,13 @@ echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 CHECK_ROOT
 
 dnf install mysql-server -y &>>$LOG_FILE
-if [ $? -ne 0 ]
-then
-    echo "MySQL server is not yet installed, installing now" &>>$LOG_FILE
-    dnf install mysql-server -y &>>$LOG_FILE
-    VALIDATE $? "Installing MySQL Server"
-else
-    echo -e "MySQL server is already installed...$Y SKIPPING $N" | tee -a $LOG_FILE
-fi
+VALIDATE $? "Installing MySQL Server"
 
 systemctl enable mysqld &>>$LOG_FILE
-if [ $? -ne 0 ]
-then
-    echo "MySQL is not yet enabled, enabling now" &>>$LOG_FILE
-    systemctl enable mysqld &>>$LOG_FILE
-    VALIDATE $? "Enabled MySQL Server"
-else
-    echo -e "MySQL is already enbaled...$Y SKIPPING $N" | tee -a $LOG_FILE
-fi
+VALIDATE $? "Enabled MySQL Server"
+
 systemctl start mysqld &>>$LOG_FILE
-if [ $? -ne 0 ]
-then
-    echo "MySQL is not yet started, starting  now" &>>$LOG_FILE
-    systemctl start mysqld &>>$LOG_FILE
-    VALIDATE $? "Started MySQL Server"
-else
-    echo -e "MySQL is already started...$Y SKIPPING $N" | tee -a $LOG_FILE
-fi
+VALIDATE $? "Started MySQL server"
 
 mysql -h mysql.daws81s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
 if [ $? -ne 0 ]
@@ -72,6 +52,7 @@ then
 else
     echo -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
+
 
 
 # #!/bin/bash
